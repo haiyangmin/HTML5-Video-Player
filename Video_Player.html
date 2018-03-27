@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body { 
+      font-family: Verdana, Geneva, sans-serif; 
+      background-color: lightgray;
+    }
+.wrapper {
+    margin:0px auto;
+    width: 80%;
+    background:#333;
+   padding:10px,0,0,0;
+   height:auto;
+}
+
+div#video_player_box{ 
+background:#000;
+margin:0px;
+float: left;
+width: 80%;
+padding:0px;
+height:auto;
+position:relative;
+}
+
+div#media-play-list {
+ background: #333; 
+padding:0px; 
+color:#CCC;
+float: left;
+width: 20%;
+ height:auto;
+}
+
+div#video_controls_bar
+{ background: #333; 
+padding:0px; 
+color:#CCC;
+ margin:0px auto;
+ width: 80%;
+}
+
+#my_video {
+    width: 100%;
+    height: auto;
+}
+
+input#seekslider{ width:80%; }
+input#volumeslider{ width: 80px;}
+
+#play-list {
+	padding:10px;
+	font-size:15px;
+	list-style-type:none;
+}
+#play-list li {
+	cursor:pointer;
+	padding-left: 0 px;
+	background:transparent url('item.png') no-repeat 0 4px;
+}
+
+.button {
+  border: 0;
+  background: transparent;
+  box-sizing: border-box;
+  width: 0;
+  height: 30px;
+  border-color: transparent transparent transparent white;
+  transition: 100ms all ease;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 15px 0 15px 30px;
+}
+.buttonPaused {
+  border: 0;
+  background: transparent;
+  box-sizing: border-box;
+  width: 0;
+  height: 30px;
+  border-color: transparent transparent transparent white;
+  transition: 100ms all ease;
+  cursor: pointer;
+  border-style: double;
+  border-width: 0px 0px 0px 25px;
+}
+
+input[type="range"] { 
+    margin: auto;
+    -webkit-appearance: none;
+    position: relative;
+    overflow: hidden;
+    height: 10px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 0; /* iOS */
+}
+
+::-webkit-slider-runnable-track {
+    background: #ddd;
+}
+
+/*
+ * 1. Set to 0 width and remove border for a slider without a thumb
+ */
+::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 0px; /* 1 */
+    height: 12px;
+    background: yellow;
+    box-shadow: -100vw 0 0 100vw dodgerblue;
+    border: 0.2px solid #999; /* 1 */
+    border-radius:12px;
+}
+
+::-moz-range-track {
+    height: 9px;
+    background: #ddd;
+}
+
+::-moz-range-thumb {
+    background: #fff;
+    height: 12px;
+    width: 0px;
+    border: 0.2px solid #999;
+    border-radius: 0 !important;
+    box-shadow: -100vw 0 0 100vw dodgerblue;
+    box-sizing: border-box;
+}
+
+::-ms-fill-lower { 
+    background: dodgerblue;
+}
+
+::-ms-thumb { 
+    background: #fff;
+    border: 0.2px solid #999;
+    height: 12px;
+    width: 12px;
+    box-sizing: border-box;
+}
+
+::-ms-ticks-after { 
+    display: none; 
+}
+
+::-ms-ticks-before { 
+    display: none; 
+}
+
+::-ms-track { 
+    background: #ddd;
+    color: transparent;
+    height: 8.4px;
+    border: none;
+}
+
+::-ms-tooltip { 
+    display: none;
+}
+
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<div id="video_player_box" class="column1">
+  <video id="my_video" width="1080" height="720" autoplay>
+    <source src="http://corrupt-system.de/assets/media/sintel/sintel-trailer.m4v" type="video/mp4">
+  </video>
+</div>
+ 
+<div id='media-play-list' class="column2">
+<ul id='play-list'>
+<li><span class='play-item' onclick='loadVideo("parrots.webm", "parrots.mp4");'>Parrots</span></li>
+<li><span class='play-item' onclick='loadVideo("paddle-wheel.webm", "paddle-wheel.mp4");'>Paddle Steamer Wheel</span></li>
+<li><span class='play-item' onclick='loadVideo("grass.webm", "grass.mp4");'>Grass</span></li>
+</ul>
+</div> 
+</div>
+<div id="video_controls_bar">
+    <div>
+    <input id="seekslider" type="range" min="0" max="100" value="0" step="1">
+	</div>
+    <button id="playpausebtn" class='button' ></button>
+    <span id="curtimetext">00:00</span> / <span id="durtimetext">00:00</span>
+    <button id="mutebtn">Mute</button>
+    <input id="volumeslider" type="range" min="0" max="100" value="80" step="1">
+    <button id="fullscreenbtn">[ &nbsp; ]</button>
+</div>
+
+
+<script>
+var vid, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn;
+function intializePlayer(){
+	// Set object references
+	vid = document.getElementById("my_video");
+	playbtn = document.getElementById("playpausebtn");
+	seekslider = document.getElementById("seekslider");
+	curtimetext = document.getElementById("curtimetext");
+	durtimetext = document.getElementById("durtimetext");
+	mutebtn = document.getElementById("mutebtn");
+	volumeslider = document.getElementById("volumeslider");
+	fullscreenbtn = document.getElementById("fullscreenbtn");
+	// Add event listeners
+	playbtn.addEventListener("click",playPause,false);
+	seekslider.addEventListener("change",vidSeek,false);
+	vid.addEventListener("timeupdate",seektimeupdate,false);
+	mutebtn.addEventListener("click",vidmute,false);
+	volumeslider.addEventListener("change",setvolume,false);
+	fullscreenbtn.addEventListener("click",toggleFullScreen,false);
+}
+window.onload = intializePlayer;
+function playPause(){
+	if(vid.paused){
+		vid.play();
+		playbtn.classList.remove("button");
+                 playbtn.classList.add("buttonPaused");
+	} else {
+		vid.pause();
+		playbtn.classList.remove("buttonPaused");
+                playbtn.classList.add("button")
+	}
+}
+
+function vidSeek(){
+	var seekto = vid.duration * (seekslider.value / 100);
+	vid.currentTime = seekto;
+}
+function seektimeupdate(){
+	var nt = vid.currentTime * (100 / vid.duration);
+	seekslider.value = nt;
+	var curmins = Math.floor(vid.currentTime / 60);
+	var cursecs = Math.floor(vid.currentTime - curmins * 60);
+	var durmins = Math.floor(vid.duration / 60);
+	var dursecs = Math.floor(vid.duration - durmins * 60);
+	if(cursecs < 10){ cursecs = "0"+cursecs; }
+	if(dursecs < 10){ dursecs = "0"+dursecs; }
+	if(curmins < 10){ curmins = "0"+curmins; }
+	if(durmins < 10){ durmins = "0"+durmins; }
+	curtimetext.innerHTML = curmins+":"+cursecs;
+	durtimetext.innerHTML = durmins+":"+dursecs;
+}
+function vidmute(){
+	if(vid.muted){
+		vid.muted = false;
+		mutebtn.innerHTML = "Mute";
+	} else {
+		vid.muted = true;
+		mutebtn.innerHTML = "Unmute";
+	}
+}
+function setvolume(){
+	vid.volume = volumeslider.value / 100;
+}
+function toggleFullScreen(){
+	if(vid.requestFullScreen){
+		vid.requestFullScreen();
+	} else if(vid.webkitRequestFullScreen){
+		vid.webkitRequestFullScreen();
+	} else if(vid.mozRequestFullScreen){
+		vid.mozRequestFullScreen();
+	}
+}
+</script>
+</body>
+</html>
