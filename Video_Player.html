@@ -2,6 +2,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style>
 
 body { 
@@ -37,7 +39,7 @@ div#media-play-list {
 
 div#video_controls_bar { 
   background: #333; 
-  padding:0px; 
+  padding:8px,0px,10px,0px; 
   color:#CCC;
   margin:0px auto;
   width: 80%;
@@ -62,29 +64,38 @@ input#volumeslider{ width: 80px;}
 	background:transparent url('item.png') no-repeat 0 4px;
 }
 
-.button {
-  border: 0;
-  background: transparent;
-  box-sizing: border-box;
-  width: 0;
-  height: 30px;
-  border-color: transparent transparent transparent white;
-  transition: 100ms all ease;
-  cursor: pointer;
-  border-style: solid;
-  border-width: 15px 0 15px 30px;
+#playpausebtn {
+    background-color:#333;
+    border: none;
+    color: white;
+    padding: 8px,8px,8px,8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size:24px ;
 }
-.buttonPaused {
-  border: 0;
-  background: transparent;
-  box-sizing: border-box;
-  width: 0;
-  height: 30px;
-  border-color: transparent transparent transparent white;
-  transition: 100ms all ease;
-  cursor: pointer;
-  border-style: double;
-  border-width: 0px 0px 0px 25px;
+
+#fullscreenbtn {
+    background-color:#333;
+    border: none;
+    color: white;
+    padding: 4px,4px,4px,8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size:24px ;
+}
+
+
+#mutebtn {
+    background-color:#333;
+    border: none;
+    color: white;
+    padding: 4px,4px,4px,8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size:24px ;
 }
 
 input[type="range"] { 
@@ -97,11 +108,9 @@ input[type="range"] {
     cursor: pointer;
     border-radius: 0; /* iOS */
 }
-
 ::-webkit-slider-runnable-track {
     background: #ddd;
 }
-
 /*
  * 1. Set to 0 width and remove border for a slider without a thumb
  */
@@ -114,12 +123,10 @@ input[type="range"] {
     border: 0.2px solid #999; /* 1 */
     border-radius:12px;
 }
-
 ::-moz-range-track {
     height: 9px;
     background: #ddd;
 }
-
 ::-moz-range-thumb {
     background: #fff;
     height: 12px;
@@ -129,11 +136,9 @@ input[type="range"] {
     box-shadow: -100vw 0 0 100vw dodgerblue;
     box-sizing: border-box;
 }
-
 ::-ms-fill-lower { 
     background: dodgerblue;
 }
-
 ::-ms-thumb { 
     background: #fff;
     border: 0.2px solid #999;
@@ -141,26 +146,21 @@ input[type="range"] {
     width: 12px;
     box-sizing: border-box;
 }
-
 ::-ms-ticks-after { 
     display: none; 
 }
-
 ::-ms-ticks-before { 
     display: none; 
 }
-
 ::-ms-track { 
     background: #ddd;
     color: transparent;
     height: 8.4px;
     border: none;
 }
-
 ::-ms-tooltip { 
     display: none;
 }
-
 video::-webkit-media-controls {
   display: none;
 }
@@ -188,11 +188,11 @@ video::-webkit-media-controls {
     <div>
     <input id="seekslider" type="range" min="0" max="100" value="0" step="1">
 	</div>
-    <button id="playpausebtn" class='button' ></button>
+    <button id="playpausebtn" class="fa fa-play" ></button>
     <span id="curtimetext">00:00</span> / <span id="durtimetext">00:00</span>
-    <button id="mutebtn">Mute</button>
+    <button id="mutebtn" class="fa fa-volume-up"></button>
     <input id="volumeslider" type="range" min="0" max="100" value="80" step="1">
-    <button id="fullscreenbtn">[ &nbsp; ]</button>
+    <button id="fullscreenbtn" class="fa fa-arrows-alt"></button>
 </div>
 
 
@@ -228,18 +228,18 @@ function playPause() {
   video[method]();
 }
 
-function updateButton (){
- if(video.paused|| video.ended){
-		playbtn.classList.remove("buttonPaused");
-        playbtn.classList.add("button");
-	}
-  
-    else {
-    	playbtn.classList.remove("button");
-        playbtn.classList.add("buttonPaused")
-	}
-}
-
+function updateButton(){
+  if(video.paused){
+       playbtn.className = "fa fa-play";
+    }
+  if(video.ended){
+       playbtn.className = "fa fa-play";
+       seekslider.value = 0;
+    }      
+ else {
+       playbtn.className = "fa fa-pause";
+    }
+}  
 
 function videoSeek(){
 	var seekto = video.duration * (seekslider.value / 100);
@@ -262,12 +262,25 @@ function seektimeupdate(){
 function videoMute(){
 	if(video.muted){
 		video.muted = false;
-		mutebtn.innerHTML = "Mute";
+		updateVolBtn();
 	} else {
 		video.muted = true;
-		mutebtn.innerHTML = "Unmute";
+		updateVolBtn();
 	}
 }
+
+function updateVolBtn(){
+    if(video.muted){
+		mutebtn.className = "fa fa-volume-off";
+        volumeslider.value = 0;
+        
+	} else {
+		mutebtn.className = "fa fa-volume-up";
+        volumeslider.value = 80;
+	}
+}
+
+
 function setvolume(){
 	video.volume = volumeslider.value / 100;
 }
@@ -280,6 +293,9 @@ function toggleFullScreen(){
 		video.mozRequestFullScreen();
 	}
 }
+
+
 </script>
 </body>
 </html>
+
