@@ -5,42 +5,42 @@
 <style>
 
 body { 
-      font-family: Verdana, Geneva, sans-serif; 
-      background-color: lightgray;
+   font-family: Verdana, Geneva, sans-serif; 
+   background-color: lightgray;
     }
 .wrapper {
-    margin:0px auto;
-    width: 80%;
-    background:#333;
+   margin:0px auto;
+   width: 80%;
+   background:#333;
    padding:10px,0,0,0;
    height:auto;
 }
 
 div#video_player_box{ 
-background:#000;
-margin:0px;
-float: left;
-width: 80%;
-padding:0px;
-height:auto;
-position:relative;
+  background:#000;
+  margin:0px;
+  float: left;
+  width: 80%;
+  padding:0px;
+  height:auto;
+  position:relative;
 }
 
 div#media-play-list {
- background: #333; 
-padding:0px; 
-color:#CCC;
-float: left;
-width: 20%;
- height:auto;
+  background: #333; 
+  padding:0px; 
+  color:#CCC;
+  float: left;
+  width: 20%;
+  height:auto;
 }
 
-div#video_controls_bar
-{ background: #333; 
-padding:0px; 
-color:#CCC;
- margin:0px auto;
- width: 80%;
+div#video_controls_bar { 
+  background: #333; 
+  padding:0px; 
+  color:#CCC;
+  margin:0px auto;
+  width: 80%;
 }
 
 #my_video {
@@ -161,18 +161,22 @@ input[type="range"] {
     display: none;
 }
 
+video::-webkit-media-controls {
+  display: none;
+}
+
 </style>
 </head>
 <body>
 <div class="wrapper">
 
-<div id="video_player_box" class="column1">
-  <video id="my_video" width="1080" height="720" autoplay>
+<div id="video_player_box" >
+  <video id="my_video" width="1080" height="720" >
     <source src="http://corrupt-system.de/assets/media/sintel/sintel-trailer.m4v" type="video/mp4">
   </video>
 </div>
  
-<div id='media-play-list' class="column2">
+<div id='media-play-list' >
 <ul id='play-list'>
 <li><span class='play-item' onclick='loadVideo("parrots.webm", "parrots.mp4");'>Parrots</span></li>
 <li><span class='play-item' onclick='loadVideo("paddle-wheel.webm", "paddle-wheel.mp4");'>Paddle Steamer Wheel</span></li>
@@ -193,10 +197,11 @@ input[type="range"] {
 
 
 <script>
-var vid, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn;
+var video, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn,method;
+
 function intializePlayer(){
 	// Set object references
-	vid = document.getElementById("my_video");
+	video = document.getElementById("my_video");
 	playbtn = document.getElementById("playpausebtn");
 	seekslider = document.getElementById("seekslider");
 	curtimetext = document.getElementById("curtimetext");
@@ -206,36 +211,47 @@ function intializePlayer(){
 	fullscreenbtn = document.getElementById("fullscreenbtn");
 	// Add event listeners
 	playbtn.addEventListener("click",playPause,false);
-	seekslider.addEventListener("change",vidSeek,false);
-	vid.addEventListener("timeupdate",seektimeupdate,false);
-	mutebtn.addEventListener("click",vidmute,false);
+	seekslider.addEventListener("change",videoSeek,false);
+	video.addEventListener("timeupdate",seektimeupdate,false);
+	mutebtn.addEventListener("click",videoMute,false);
 	volumeslider.addEventListener("change",setvolume,false);
 	fullscreenbtn.addEventListener("click",toggleFullScreen,false);
+    video.addEventListener("play", updateButton);
+    video.addEventListener("pause", updateButton);
+    video.controls = false;
+
 }
 window.onload = intializePlayer;
-function playPause(){
-	if(vid.paused){
-		vid.play();
-		playbtn.classList.remove("button");
-                 playbtn.classList.add("buttonPaused");
-	} else {
-		vid.pause();
+
+function playPause() {
+  const method = video.paused ? "play" : "pause";
+  video[method]();
+}
+
+function updateButton (){
+ if(video.paused|| video.ended){
 		playbtn.classList.remove("buttonPaused");
-                playbtn.classList.add("button")
+        playbtn.classList.add("button");
+	}
+  
+    else {
+    	playbtn.classList.remove("button");
+        playbtn.classList.add("buttonPaused")
 	}
 }
 
-function vidSeek(){
-	var seekto = vid.duration * (seekslider.value / 100);
-	vid.currentTime = seekto;
+
+function videoSeek(){
+	var seekto = video.duration * (seekslider.value / 100);
+	video.currentTime = seekto;
 }
 function seektimeupdate(){
-	var nt = vid.currentTime * (100 / vid.duration);
+	var nt = video.currentTime * (100 / video.duration);
 	seekslider.value = nt;
-	var curmins = Math.floor(vid.currentTime / 60);
-	var cursecs = Math.floor(vid.currentTime - curmins * 60);
-	var durmins = Math.floor(vid.duration / 60);
-	var dursecs = Math.floor(vid.duration - durmins * 60);
+	var curmins = Math.floor(video.currentTime / 60);
+	var cursecs = Math.floor(video.currentTime - curmins * 60);
+	var durmins = Math.floor(video.duration / 60);
+	var dursecs = Math.floor(video.duration - durmins * 60);
 	if(cursecs < 10){ cursecs = "0"+cursecs; }
 	if(dursecs < 10){ dursecs = "0"+dursecs; }
 	if(curmins < 10){ curmins = "0"+curmins; }
@@ -243,25 +259,25 @@ function seektimeupdate(){
 	curtimetext.innerHTML = curmins+":"+cursecs;
 	durtimetext.innerHTML = durmins+":"+dursecs;
 }
-function vidmute(){
-	if(vid.muted){
-		vid.muted = false;
+function videoMute(){
+	if(video.muted){
+		video.muted = false;
 		mutebtn.innerHTML = "Mute";
 	} else {
-		vid.muted = true;
+		video.muted = true;
 		mutebtn.innerHTML = "Unmute";
 	}
 }
 function setvolume(){
-	vid.volume = volumeslider.value / 100;
+	video.volume = volumeslider.value / 100;
 }
 function toggleFullScreen(){
-	if(vid.requestFullScreen){
-		vid.requestFullScreen();
-	} else if(vid.webkitRequestFullScreen){
-		vid.webkitRequestFullScreen();
-	} else if(vid.mozRequestFullScreen){
-		vid.mozRequestFullScreen();
+	if(video.requestFullScreen){
+		video.requestFullScreen();
+	} else if(video.webkitRequestFullScreen){
+		video.webkitRequestFullScreen();
+	} else if(video.mozRequestFullScreen){
+		video.mozRequestFullScreen();
 	}
 }
 </script>
