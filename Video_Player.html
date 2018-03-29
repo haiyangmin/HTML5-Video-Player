@@ -5,20 +5,18 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
-
-body { 
-   font-family: Verdana, Geneva, sans-serif; 
+body {
+   font-family: Verdana, Geneva, sans-serif;
    background-color: lightgray;
     }
 .wrapper {
    margin:0px auto;
    width: 80%;
    background:#333;
-   padding:10px,0,0,0;
    height:auto;
 }
 
-div#video_player_box{ 
+div#video_player_box{
   background:#000;
   margin:0px;
   float: left;
@@ -27,30 +25,75 @@ div#video_player_box{
   height:auto;
   position:relative;
 }
-
 div#media-play-list {
-  background: #333; 
-  padding:0px; 
+  background: #333;
+  padding:0px;
   color:#CCC;
   float: left;
   width: 20%;
   height:auto;
 }
 
-div#video_controls_bar { 
-  background: #333; 
-  padding:8px,0px,10px,0px; 
+div.controlsBox{
+  margin:0px auto;
+   width: 80%;
+   background:#333;
+   height:auto;
+}
+
+div#video_controls_bar {
+  display: grid;
+  grid-template-columns: auto auto auto auto ;
+  grid-template-rows: 25px 40px;
+  grid-gap: 0px;
+  background-color: #333;
+  padding:0px;
   color:#CCC;
+  float: left;
   margin:0px auto;
   width: 80%;
 }
+
+div.emptybox{
+  background: #333;
+  padding:0px;
+  color:#CCC;
+  float: left;
+  width: 20%;
+  height:auto;
+  margin:0px auto;
+}
+
+
+div#video_controls_bar> div {
+  background-color:  #333;
+  border: 0px solid red;
+}
+
+.item1 {
+  grid-column-start: 1;
+  grid-column-end: 5;
+}
+.item2 {
+  text-align: left;
+  padding: 0;
+}
+.item5 {
+  text-align: right;
+  padding: 0;
+}
+
+span#curtimetext,span#durtimetext,span#line {
+ font-size: 18px;
+ }
+
 
 #my_video {
     width: 100%;
     height: auto;
 }
 
-input#seekslider{ width:80%; }
+input#seekslider{ width:100%; }
 input#volumeslider{ width: 80px;}
 
 #play-list {
@@ -60,53 +103,44 @@ input#volumeslider{ width: 80px;}
 }
 #play-list li {
 	cursor:pointer;
-	padding-left: 0 px;
+	padding-left: 0px;
 	background:transparent url('item.png') no-repeat 0 4px;
 }
-
 #playpausebtn {
     background-color:#333;
     border: none;
-    color: white;
-    padding: 8px,8px,8px,8px;
+    color: white; 
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size:24px ;
 }
-
 #fullscreenbtn {
     background-color:#333;
     border: none;
     color: white;
-    padding: 4px,4px,4px,8px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size:24px ;
 }
-
-
 #mutebtn {
     background-color:#333;
     border: none;
     color: white;
-    padding: 4px,4px,4px,8px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size:24px ;
 }
-
-input[type="range"] { 
+input[type="range"] {
     margin: auto;
     -webkit-appearance: none;
     position: relative;
     overflow: hidden;
     height: 10px;
-    width: 100%;
     cursor: pointer;
     border-radius: 0; /* iOS */
+    vertical-align: middle;
 }
 ::-webkit-slider-runnable-track {
     background: #ddd;
@@ -136,43 +170,42 @@ input[type="range"] {
     box-shadow: -100vw 0 0 100vw dodgerblue;
     box-sizing: border-box;
 }
-::-ms-fill-lower { 
+::-ms-fill-lower {
     background: dodgerblue;
 }
-::-ms-thumb { 
+::-ms-thumb {
     background: #fff;
     border: 0.2px solid #999;
     height: 12px;
     width: 12px;
     box-sizing: border-box;
 }
-::-ms-ticks-after { 
-    display: none; 
+::-ms-ticks-after {
+    display: none;
 }
-::-ms-ticks-before { 
-    display: none; 
+::-ms-ticks-before {
+    display: none;
 }
-::-ms-track { 
+::-ms-track {
     background: #ddd;
     color: transparent;
     height: 8.4px;
     border: none;
 }
-::-ms-tooltip { 
+::-ms-tooltip {
     display: none;
 }
 video::-webkit-media-controls {
   display: none;
 }
-
 </style>
 </head>
 <body>
 <div class="wrapper">
 
 <div id="video_player_box" >
-  <video id="my_video" width="1080" height="720" >
-    <source src="http://corrupt-system.de/assets/media/sintel/sintel-trailer.m4v" type="video/mp4">
+  <video id="my_video" >
+    <source src="https://player.vimeo.com/external/194837908.sd.mp4?s=c350076905b78c67f74d7ee39fdb4fef01d12420&amp;profile_id=164" type="video/mp4">
   </video>
 </div>
  
@@ -181,24 +214,27 @@ video::-webkit-media-controls {
 <li><span class='play-item' onclick='loadVideo("parrots.webm", "parrots.mp4");'>Parrots</span></li>
 <li><span class='play-item' onclick='loadVideo("paddle-wheel.webm", "paddle-wheel.mp4");'>Paddle Steamer Wheel</span></li>
 <li><span class='play-item' onclick='loadVideo("grass.webm", "grass.mp4");'>Grass</span></li>
+<li>x</li>
+<li>x</li>
 </ul>
-</div> 
 </div>
-<div id="video_controls_bar">
-    <div>
-    <input id="seekslider" type="range" min="0" max="100" value="0" step="1">
-	</div>
-    <button id="playpausebtn" class="fa fa-play" ></button>
-    <span id="curtimetext">00:00</span> / <span id="durtimetext">00:00</span>
-    <button id="mutebtn" class="fa fa-volume-up"></button>
-    <input id="volumeslider" type="range" min="0" max="100" value="80" step="1">
-    <button id="fullscreenbtn" class="fa fa-arrows-alt"></button>
 </div>
 
+<div class="controlsBox">
+<div id="video_controls_bar">
+<div class="item1"><input id="seekslider" type="range" min="0" max="100" value="0" step="0.05"></div>
+  <div class="item2"><button id="playpausebtn" class="fa fa-play" ></button></div>
+  <div class="item3"></div>
+  <div class="item4"></div>
+  <div class="item5"><span id="curtimetext">00:00</span> <span id="line"> / </span><span id="durtimetext">00:00</span><button id="mutebtn" class="fa fa-volume-up"></button><input id="volumeslider" type="range" min="0" max="100" value="80" step="1"><button id="fullscreenbtn" class="fa fa-arrows-alt"></button></div>
+</div>
+
+<div class="emptybox">
+</div>
+</div>
 
 <script>
 var video, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn,method;
-
 function intializePlayer(){
 	// Set object references
 	video = document.getElementById("my_video");
@@ -216,35 +252,30 @@ function intializePlayer(){
 	mutebtn.addEventListener("click",videoMute,false);
 	volumeslider.addEventListener("change",setvolume,false);
 	fullscreenbtn.addEventListener("click",toggleFullScreen,false);
-    video.addEventListener("play", updateButton);
-    video.addEventListener("pause", updateButton);
     video.controls = false;
-
 }
 window.onload = intializePlayer;
 
 function playPause() {
   const method = video.paused ? "play" : "pause";
   video[method]();
+  updateButton();
 }
-
-function updateButton(){
-  if(video.paused){
-       playbtn.className = "fa fa-play";
-    }
-  if(video.ended){
-       playbtn.className = "fa fa-play";
-       seekslider.value = 0;
-    }      
+	
+function updateButton() {
+  if(video.paused || video.ended) {
+       playbtn.className = "fa fa-play"
+    }        
  else {
-       playbtn.className = "fa fa-pause";
+       playbtn.className = "fa fa-pause" ;
     }
-}  
+} 
 
 function videoSeek(){
 	var seekto = video.duration * (seekslider.value / 100);
 	video.currentTime = seekto;
 }
+
 function seektimeupdate(){
 	var nt = video.currentTime * (100 / video.duration);
 	seekslider.value = nt;
@@ -268,19 +299,16 @@ function videoMute(){
 		updateVolBtn();
 	}
 }
-
 function updateVolBtn(){
     if(video.muted){
 		mutebtn.className = "fa fa-volume-off";
         volumeslider.value = 0;
-        
+       
 	} else {
 		mutebtn.className = "fa fa-volume-up";
         volumeslider.value = 80;
 	}
 }
-
-
 function setvolume(){
 	video.volume = volumeslider.value / 100;
 }
@@ -293,9 +321,6 @@ function toggleFullScreen(){
 		video.mozRequestFullScreen();
 	}
 }
-
-
 </script>
 </body>
 </html>
-
