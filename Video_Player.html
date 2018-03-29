@@ -15,7 +15,6 @@ body {
    background:#333;
    height:auto;
 }
-
 div#video_player_box{
   background:#000;
   margin:0px;
@@ -33,14 +32,12 @@ div#media-play-list {
   width: 20%;
   height:auto;
 }
-
 div.controlsBox{
   margin:0px auto;
    width: 80%;
    background:#333;
    height:auto;
 }
-
 div#video_controls_bar {
   display: grid;
   grid-template-columns: auto auto auto auto ;
@@ -53,7 +50,6 @@ div#video_controls_bar {
   margin:0px auto;
   width: 80%;
 }
-
 div.emptybox{
   background: #333;
   padding:0px;
@@ -63,13 +59,10 @@ div.emptybox{
   height:auto;
   margin:0px auto;
 }
-
-
 div#video_controls_bar> div {
   background-color:  #333;
   border: 0px solid red;
 }
-
 .item1 {
   grid-column-start: 1;
   grid-column-end: 5;
@@ -82,20 +75,15 @@ div#video_controls_bar> div {
   text-align: right;
   padding: 0;
 }
-
 span#curtimetext,span#durtimetext,span#line {
  font-size: 18px;
  }
-
-
 #my_video {
     width: 100%;
     height: auto;
 }
-
 input#seekslider{ width:100%; }
 input#volumeslider{ width: 80px;}
-
 #play-list {
 	padding:10px;
 	font-size:15px;
@@ -235,6 +223,7 @@ video::-webkit-media-controls {
 
 <script>
 var video, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn,method;
+
 function intializePlayer(){
 	// Set object references
 	video = document.getElementById("my_video");
@@ -252,19 +241,28 @@ function intializePlayer(){
 	mutebtn.addEventListener("click",videoMute,false);
 	volumeslider.addEventListener("change",setvolume,false);
 	fullscreenbtn.addEventListener("click",toggleFullScreen,false);
-    video.controls = false;
+        video.addEventListener("playing", updateButton);
+        video.addEventListener("pause", updateButton);
+        video.addEventListener("ended", updateButton1);
+        video.controls = false;
 }
+	
 window.onload = intializePlayer;
 
 function playPause() {
   const method = video.paused ? "play" : "pause";
   video[method]();
-  updateButton();
 }
+
+function updateButton1() {
+  if(video.ended) {
+       seekslider.value = 0;
+    }        
+} 
 	
 function updateButton() {
   if(video.paused || video.ended) {
-       playbtn.className = "fa fa-play"
+       playbtn.className = "fa fa-play";
     }        
  else {
        playbtn.className = "fa fa-pause" ;
@@ -290,6 +288,7 @@ function seektimeupdate(){
 	curtimetext.innerHTML = curmins+":"+cursecs;
 	durtimetext.innerHTML = durmins+":"+dursecs;
 }
+
 function videoMute(){
 	if(video.muted){
 		video.muted = false;
@@ -299,6 +298,7 @@ function videoMute(){
 		updateVolBtn();
 	}
 }
+
 function updateVolBtn(){
     if(video.muted){
 		mutebtn.className = "fa fa-volume-off";
@@ -309,9 +309,11 @@ function updateVolBtn(){
         volumeslider.value = 80;
 	}
 }
+
 function setvolume(){
 	video.volume = volumeslider.value / 100;
 }
+
 function toggleFullScreen(){
 	if(video.requestFullScreen){
 		video.requestFullScreen();
@@ -321,6 +323,7 @@ function toggleFullScreen(){
 		video.mozRequestFullScreen();
 	}
 }
+
 </script>
 </body>
 </html>
