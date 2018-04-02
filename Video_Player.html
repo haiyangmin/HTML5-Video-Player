@@ -1,171 +1,201 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <style>
-body {
+  
+html,body {
    font-family: Verdana, Geneva, sans-serif;
    background-color: lightgray;
+   margin: 0px;
     }
 .wrapper {
+   width: 100%;
+   box-sizing: border-box;
+}
+.searchBar {
    margin:0px auto;
-   width: 80%;
+   width: 100%;
    background:#333;
+   height:40px;
+   box-sizing: border-box;
+}
+
+form {
+float: right;
+  }
+
+input[type=search]{
+    width: 180px;
+    padding: 3px 0px;
+    margin: 7px 0;
+    display: inline-block;
+    border-radius: 8px;
+    border: 1px solid #333;
+    box-sizing: border-box;
+}
+
+#submitbtn {
+    background-color:#333;
+    border: none;
+    color: white;
+    font-size:18px ;
+   padding: 2px 8px 2px 0px;
+      margin: 1px 0px;
+}
+
+.video {
+   margin:0px auto;
+   width:calc(100% - 220px);
+   min-width: 350px;
+   float: left;
+   box-sizing: border-box;
+   background:black;
+   height: calc(100vh - 95px);
+   text-align:center;
+}
+.playlist {
+   margin:0px auto;
+   width: 220px;
+   background:#484c4c;
+   float: left;
    height:auto;
 }
-div#video_player_box{
-  background:#000;
-  margin:0px;
-  float: left;
-  width: 80%;
-  padding:0px;
-  height:auto;
-  position:relative;
-}
-div#media-play-list {
-  background: #333;
-  padding:0px;
-  color:#CCC;
-  float: left;
-  width: 20%;
-  height:auto;
-}
-div.controlsBox{
-  margin:0px auto;
-   width: 80%;
-   background:#333;
-   height:auto;
-}
-div#video_controls_bar {
-  display: grid;
-  grid-template-columns: auto auto auto auto ;
-  grid-template-rows: 25px 40px;
+.video_controls {
+   display: grid;
+  grid-template-rows: 20px 35px;
   grid-gap: 0px;
   background-color: #333;
-  padding:0px;
-  color:#CCC;
   float: left;
   margin:0px auto;
-  width: 80%;
-}
-div.emptybox{
-  background: #333;
-  padding:0px;
-  color:#CCC;
-  float: left;
-  width: 20%;
-  height:auto;
-  margin:0px auto;
-}
-div#video_controls_bar> div {
-  background-color:  #333;
-  border: 0px solid red;
-}
+  width:calc(100% - 220px);
+  min-width: 350px;
+  bottom: 0;
+  box-sizing: border-box;
+  }
+  
 .item1 {
-  grid-column-start: 1;
-  grid-column-end: 5;
+   grid-column-start: 1;
+    grid-column-end: 6;
 }
 .item2 {
-  text-align: left;
-  padding: 0;
+    text-align: left;
+    padding-top: 5px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
 }
-.item5 {
+.item4 {
+  text-align: center;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+}
+.item6 {
   text-align: right;
-  padding: 0;
+    padding-top: 0px;
+    padding-right: 5px;
+    padding-bottom: 0px;
+    padding-left: 0px;
 }
-span#curtimetext,span#durtimetext,span#line {
- font-size: 18px;
- }
+
 #my_video {
-    width: 100%;
-    height: auto;
+  position: relative;
 }
+
+#my_video:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+}
+
+span#curtimetext,span#durtimetext,span#line {
+ font-size: 15px;
+ color:white;
+ }
 input#seekslider{ width:100%; }
 input#volumeslider{ width: 80px;}
+
 #play-list {
-	padding:10px;
-	font-size:15px;
+	padding:8px;
+	font-size:14px;
 	list-style-type:none;
 }
 #play-list li {
 	cursor:pointer;
 	padding-left: 0px;
-	background:transparent url('item.png') no-repeat 0 4px;
+	background:transparent;
+	color:#deedef;
 }
+
+#play-list li:hover {
+    opacity: 0.5;
+}
+
 #playpausebtn {
     background-color:#333;
     border: none;
     color: white; 
-    text-align: center;
-    text-decoration: none;
     font-size:24px ;
 }
 #fullscreenbtn {
     background-color:#333;
     border: none;
     color: white;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-size:24px ;
 }
 #mutebtn {
     background-color:#333;
     border: none;
     color: white;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-size:24px ;
 }
 input[type="range"] {
-    margin: auto;
+    margin:0 auto;
     -webkit-appearance: none;
     position: relative;
     overflow: hidden;
-    height: 10px;
+    height: 5px;
     cursor: pointer;
-    border-radius: 0; /* iOS */
     vertical-align: middle;
 }
 ::-webkit-slider-runnable-track {
-    background: #ddd;
+    background: #5b6060;
 }
 /*
  * 1. Set to 0 width and remove border for a slider without a thumb
  */
 ::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 0px; /* 1 */
-    height: 12px;
-    background: yellow;
+    width: 10px; /* 1 */
+    height: 10px;
+    background: white;
     box-shadow: -100vw 0 0 100vw dodgerblue;
     border: 0.2px solid #999; /* 1 */
-    border-radius:12px;
+    border-radius:50%;
 }
 ::-moz-range-track {
-    height: 9px;
+    height: 5px;
     background: #ddd;
 }
 ::-moz-range-thumb {
-    background: #fff;
-    height: 12px;
-    width: 0px;
+    background: white;
+    height: 10px;
+    width: 10px;
     border: 0.2px solid #999;
     border-radius: 0 !important;
     box-shadow: -100vw 0 0 100vw dodgerblue;
-    box-sizing: border-box;
 }
 ::-ms-fill-lower {
     background: dodgerblue;
 }
 ::-ms-thumb {
-    background: #fff;
+    background: white;
     border: 0.2px solid #999;
-    height: 12px;
-    width: 12px;
+    height: 10px;
+    width: 10px;
     box-sizing: border-box;
 }
 ::-ms-ticks-after {
@@ -187,43 +217,42 @@ video::-webkit-media-controls {
   display: none;
 }
 </style>
-</head>
+
 <body>
 <div class="wrapper">
-
-<div id="video_player_box" >
+ <div class="searchBar">
+  <form action="" autocomplete="on">
+   <input type="search" name="videoSearch" placeholder="Input key words" required>
+   <button id="submitbtn" class="fa fa-search"></button>
+   </form>
+ </div>
+<div class="video">
   <video id="my_video" >
     <source src="https://player.vimeo.com/external/194837908.sd.mp4?s=c350076905b78c67f74d7ee39fdb4fef01d12420&amp;profile_id=164" type="video/mp4">
+     Your browser does not support HTML5 video.
   </video>
-</div>
- 
-<div id='media-play-list' >
+ </div>
+<div class="playlist">
 <ul id='play-list'>
-<li><span class='play-item' onclick='loadVideo("parrots.webm", "parrots.mp4");'>Parrots</span></li>
-<li><span class='play-item' onclick='loadVideo("paddle-wheel.webm", "paddle-wheel.mp4");'>Paddle Steamer Wheel</span></li>
-<li><span class='play-item' onclick='loadVideo("grass.webm", "grass.mp4");'>Grass</span></li>
-<li>x</li>
-<li>x</li>
+<li class='play-item'>The walking dead episode 1</li>
+<li class='play-item'>The walking dead episode 2</li>
+<li class='play-item'>The walking dead episode 3</li>
+<li class='play-item'>The walking dead episode 4</li>
+<li class='play-item'>The walking dead episode 5</li>
 </ul>
 </div>
-</div>
-
-<div class="controlsBox">
-<div id="video_controls_bar">
-<div class="item1"><input id="seekslider" type="range" min="0" max="100" value="0" step="0.05"></div>
-  <div class="item2"><button id="playpausebtn" class="fa fa-play" ></button></div>
+   <div class="video_controls">
+  <div class="item1"><input id="seekslider" type="range" min="0" max="100" value="0" step="0.05"></div>
+  <div class="item2"><span id="curtimetext">00:00</span> <span id="line"> / </span><span id="durtimetext">00:00</span></div>
   <div class="item3"></div>
-  <div class="item4"></div>
-  <div class="item5"><span id="curtimetext">00:00</span> <span id="line"> / </span><span id="durtimetext">00:00</span><button id="mutebtn" class="fa fa-volume-up"></button><input id="volumeslider" type="range" min="0" max="100" value="80" step="1"><button id="fullscreenbtn" class="fa fa-arrows-alt"></button></div>
-</div>
-
-<div class="emptybox">
-</div>
+  <div class="item4"><button id="playpausebtn" class="fa fa-play" ></button></div>
+  <div class="item5"></div>
+  <div class="item6"><button id="mutebtn" class="fa fa-volume-up"></button><input id="volumeslider" type="range" min="0" max="100" value="80" step="1"><button id="fullscreenbtn" class="fa fa-arrows-alt"></button></div>
+  </div>
 </div>
 
 <script>
-var video, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn,method;
-
+var video, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn,method,playList,height, width, videoHeight, videoWidth ;
 function intializePlayer(){
 	// Set object references
 	video = document.getElementById("my_video");
@@ -234,6 +263,10 @@ function intializePlayer(){
 	mutebtn = document.getElementById("mutebtn");
 	volumeslider = document.getElementById("volumeslider");
 	fullscreenbtn = document.getElementById("fullscreenbtn");
+    playList = document.getElementsByClassName("play-item");
+for (var i = 0; i < Object.keys(playList).length; i++) {
+  playList[i].addEventListener('click', loadVideo, false);
+}    
 	// Add event listeners
 	playbtn.addEventListener("click",playPause,false);
 	seekslider.addEventListener("change",videoSeek,false);
@@ -241,39 +274,65 @@ function intializePlayer(){
 	mutebtn.addEventListener("click",videoMute,false);
 	volumeslider.addEventListener("change",setvolume,false);
 	fullscreenbtn.addEventListener("click",toggleFullScreen,false);
-        video.addEventListener("playing", updateButton);
-        video.addEventListener("pause", updateButton);
-        video.addEventListener("ended", updateButton1);
-        video.controls = false;
+    video.addEventListener("playing", updateButton);
+    video.addEventListener("pause", updateButton);
+    video.addEventListener("ended", reSetButton);
+    video.controls = false;
+    resize();
 }
-	
-window.onload = intializePlayer;
 
+window.onload = intializePlayer;
+window.onresize = resize;
+
+function resize(){
+   height = window.innerHeight;
+   width = window.innerWidth;
+   videoHeight = height-95;
+   videoWidth = width -220;
+   if(videoWidth/videoHeight > 16/9){
+   document.getElementById("my_video").style.height = videoHeight + "px";
+   document.getElementById("my_video").style.width = (videoHeight*16)/9 + "px";
+   document.getElementById("my_video").style.top= ((height-95)-videoHeight)/2 + "px";
+   }
+   else if (videoWidth/videoHeight < 16/9){
+   document.getElementById("my_video").style.width = videoWidth + "px";
+   document.getElementById("my_video").style.height = (videoWidth*9)/16 + "px";
+   document.getElementById("my_video").style.top= ((height-95)-(videoWidth*9)/16)/2 + "px";
+   }
+   else {
+   document.getElementById("my_video").style.width = videoWidth + "px";
+   document.getElementById("my_video").style.height = videoHeight + "px";
+   document.getElementById("my_video").style.top= ((height-95)-videoHeight)/2 + "px";
+   }
+  }
+
+window.onresize = function() {
+                resize();
+            };
+            
 function playPause() {
   const method = video.paused ? "play" : "pause";
-  video[method]();
+  video[method](); 
 }
-
-function updateButton1() {
-  if(video.ended) {
-       seekslider.value = 0;
-    }        
-} 
 	
 function updateButton() {
   if(video.paused || video.ended) {
        playbtn.className = "fa fa-play";
     }        
  else {
-       playbtn.className = "fa fa-pause" ;
+       playbtn.className = "fa fa-pause";
     }
 } 
+
+function reSetButton() {
+  playbtn.className = "fa fa-play";
+  seekslider.value = 0;
+  }
 
 function videoSeek(){
 	var seekto = video.duration * (seekslider.value / 100);
 	video.currentTime = seekto;
 }
-
 function seektimeupdate(){
 	var nt = video.currentTime * (100 / video.duration);
 	seekslider.value = nt;
@@ -288,7 +347,6 @@ function seektimeupdate(){
 	curtimetext.innerHTML = curmins+":"+cursecs;
 	durtimetext.innerHTML = durmins+":"+dursecs;
 }
-
 function videoMute(){
 	if(video.muted){
 		video.muted = false;
@@ -298,7 +356,6 @@ function videoMute(){
 		updateVolBtn();
 	}
 }
-
 function updateVolBtn(){
     if(video.muted){
 		mutebtn.className = "fa fa-volume-off";
@@ -309,11 +366,9 @@ function updateVolBtn(){
         volumeslider.value = 80;
 	}
 }
-
 function setvolume(){
 	video.volume = volumeslider.value / 100;
 }
-
 function toggleFullScreen(){
 	if(video.requestFullScreen){
 		video.requestFullScreen();
@@ -324,6 +379,19 @@ function toggleFullScreen(){
 	}
 }
 
+function loadVideo() {
+			video.src = "The walking dead episode 1.mp4";
+            reSetButton();
+			video.load();
+            video.play();
+			}
+
+// Checks if the browser can play this particular type of file or not
+function canPlayVideo(ext) {
+	var ableToPlay = video.canPlayType('video/' + ext);
+	if (ableToPlay == '') return false;
+	else return true;
+}
 </script>
 </body>
 </html>
