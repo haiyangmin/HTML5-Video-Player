@@ -10,7 +10,7 @@
 <style>
 html,body {
 font-family: Verdana, Geneva, sans-serif;
-background-color: lightgray;
+background-color:lightgray;
 margin: 0px;
 }
 .wrapper {
@@ -24,11 +24,35 @@ background:#333;
 height:40px;
 box-sizing: border-box;
 }
-form {
-float: right;
+#currentVideo {
+margin:0px auto;
+width:calc(100% - 300px);
+min-width: 320px;
+float: left;
+box-sizing: border-box;
+height: auto;
+position:relative;
 }
+#currentVideoName {
+color:white;
+padding:0px;
+font-size:14px;
+margin: 11px 10px;
+}
+
+#searchBox{
+margin:0px auto;
+width:300px;
+float:left;
+height: auto;
+}
+
+form {
+float:left
+}
+
 input[type=search]{
-width: 265px;
+width: 250px;
 padding: 3px 0px;
 margin: 7px 0;
 display: inline-block;
@@ -287,10 +311,15 @@ width:100%; /* The width is 100%, when the viewport is 768px or smaller */
 <body>
 <div class="wrapper">
 <div class="searchBar">
+<div id="currentVideo">
+<p id="currentVideoName"></p>
+</div >
+<div id="searchBox">
 <form action="" autocomplete="on">
 <input type="search" name="videoSearch" placeholder="Input key words" required>
 <button id="submitbtn" class="fa fa-search"></button>
 </form>
+</div>
 </div>
 <div class="video-container" id="video-container">
 <div class="video-box">
@@ -358,6 +387,31 @@ Your browser does not support HTML5 video.
 <li class='play-item'>Castle season 8 episode 22</li>
 </ul>
 </li>
+<li>Game of Thrones Season 5
+<ul>
+<li class='play-item'>Game of Thrones S05E01</li>
+<li class='play-item'>Game of Thrones S05E02</li>
+<li class='play-item'>Game of Thrones S05E03</li>
+<li class='play-item'>Game of Thrones S05E04</li>
+<li class='play-item'>Game of Thrones S05E05</li>
+<li class='play-item'>Game of Thrones S05E06</li>
+<li class='play-item'>Game of Thrones S05E07</li>
+</ul>
+</li>
+<li>Game of Thrones Season 6
+<ul>
+<li class='play-item'>Game of Thrones S06E01</li>
+<li class='play-item'>Game of Thrones S06E02</li>
+<li class='play-item'>Game of Thrones S06E03</li>
+<li class='play-item'>Game of Thrones S06E04</li>
+<li class='play-item'>Game of Thrones S06E05</li>
+<li class='play-item'>Game of Thrones S06E06</li>
+<li class='play-item'>Game of Thrones S06E07</li>
+<li class='play-item'>Game of Thrones S06E08</li>
+<li class='play-item'>Game of Thrones S06E09</li>
+<li class='play-item'>Game of Thrones S06E10</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>Movies
@@ -380,10 +434,12 @@ Your browser does not support HTML5 video.
 </div>
 <script>
 (function () {
-var video, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn,method,playList,playItems,playListBox,height, width, videoHeight, videoWidth,listHeight,listBoxWidth,togglebtn,togglebtnBox,videoBox ,nextBtn,lastBtn,currentVideo,source;
+var video, playbtn, seekslider, curtimetext, durtimetext, mutebtn, volumeslider, fullscreenbtn,method,playList,playItems,playListBox,height, width, videoHeight, videoWidth,listHeight,listBoxWidth,togglebtn,togglebtnBox,videoBox ,nextBtn,lastBtn,currentVideo,source,currentVideoName;
 function intializePlayer(){
 // Set object references
 currentVideo= "The walking dead episode 1"+ ".mp4";
+currentVideoName=document.getElementById("currentVideoName");
+currentVideoName.textContent="The walking dead episode 1";
 video = document.getElementById("my-video");
 playbtn = document.getElementById("playpausebtn");
 lastBtn = document.getElementById("backwardbtn");
@@ -432,7 +488,7 @@ video.addEventListener("timeupdate",seektimeupdate,false);
 mutebtn.addEventListener("click",videoMute,false);
 volumeslider.addEventListener("change",setvolume,false);
 fullscreenbtn.addEventListener("click",toggleFullScreen,false);
-video.addEventListener("ended", reSetButton,false);
+video.addEventListener("ended", endHandler,false);
 video.controls = false;
 togglebtnBox.addEventListener('click', toggleArrowbtn,false);
 resize();
@@ -459,6 +515,7 @@ for (let item of playItems) {
 if ((item.textContent +".mp4")== currentVideo){
 video.src = item.previousElementSibling.textContent+".mp4" ;
 currentVideo = item.previousElementSibling.textContent+".mp4" ;
+currentVideoName.textContent = item.previousElementSibling.textContent;
 break;
 }
 }
@@ -468,15 +525,25 @@ updateButton();
 }
 function playNextOne(){
 for (let item of playItems) {
-if ((item.textContent +".mp4")== currentVideo){
+if ((item.textContent +".mp4")== currentVideo && (item.nextElementSibling.textContent != null)){
 video.src = item.nextElementSibling.textContent+".mp4" ;
 currentVideo = item.nextElementSibling.textContent+".mp4" ;
+currentVideoName.textContent = item.nextElementSibling.textContent;
 break;
 }
 }
 video.load();
 video.play();
 updateButton();
+}
+
+function endHandler() {
+if (currentVideo == "The walking dead episode 13.mp4" || currentVideo == "Castle season 8 episode 22.mp4"){
+reSetButton();
+ }
+else {
+playNextOne();
+ }
 }
 
 function resize(){
@@ -579,7 +646,8 @@ video.mozRequestFullScreen();
 function loadVideo() {
 if (event.target.parentNode.className == "play-item"){
 video.src = event.target.textContent + ".mp4";
-currentVideo=event.target.textContent + ".mp4";
+currentVideo= event.target.textContent + ".mp4";
+currentVideoName.textContent= event.target.textContent;
 //alert(currentVideo);
 video.load();
 video.play();
